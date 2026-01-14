@@ -3,215 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-com Growth Plan 2024</title>
+    <title>Etsy Plan 2024 - Stable</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
     
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
     
-    <script src="https://unpkg.com/recharts/umd/Recharts.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/recharts/2.10.3/Recharts.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .animate-in { animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .lucide { width: 100%; height: 100%; }
     </style>
 </head>
 <body class="bg-slate-50">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useMemo, useEffect } = React;
+        // Lấy các component từ biến Global của thư viện
+        const { useState, useMemo, useEffect, useRef } = React;
         const { 
             LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, 
-            Tooltip, Legend, ResponsiveContainer, ComposedChart, Area 
+            Tooltip, Legend, ResponsiveContainer, ComposedChart 
         } = Recharts;
 
-        // Thành phần Icon Lucide (Thay thế cho việc import)
-        const Icon = ({ name, className }) => {
-            const containerRef = React.useRef(null);
+        // Thành phần hiển thị Icon an toàn
+        const LucideIcon = ({ name, className = "w-5 h-5" }) => {
+            const iconRef = useRef(null);
             useEffect(() => {
-                if (containerRef.current) {
-                    lucide.createIcons({
-                        targets: containerRef.current
-                    });
+                if (window.lucide) {
+                    window.lucide.createIcons();
                 }
             }, [name]);
-            return <i data-lucide={name} className={className} ref={containerRef}></i>;
+            return (
+                <div className={className} style={{display: 'inline-block'}}>
+                    <i data-lucide={name}></i>
+                </div>
+            );
         };
 
         const EXCHANGE_RATE = 25000;
-
         const rawData = [
-            { month: 'Tháng 1', event: 'New Year (1/1)', shops: 3, newShops: ['TonyCNMED', 'ArtCNMED', 'Simply'], staffTotal: 4, staffOffline: 2, staffOutsource: 2, staffDesc: 'Team cốt lõi (Tuấn, Trân)', costVND: 27000000, revenueUSD: 0, milestone: 'Setup team & Quy trình', shopDetails: [{ name: 'TonyCNMED', revUSD: 0 }, { name: 'ArtCNMED', revUSD: 0 }, { name: 'Simply', revUSD: 0 }] },
-            { month: 'Tháng 2', event: "Valentine's (14/2)", shops: 5, newShops: ['CNMED Studio', 'Lab'], staffTotal: 9, staffOffline: 5, staffOutsource: 4, staffDesc: 'Tuyển thêm Seller & Design', costVND: 54000000, revenueUSD: 5000, milestone: 'Doanh thu đầu tiên', shopDetails: [{ name: 'TonyCNMED', revUSD: 1500 }, { name: 'ArtCNMED', revUSD: 1500 }, { name: 'Simply', revUSD: 1000 }, { name: 'CNMED Studio', revUSD: 500 }, { name: 'Lab', revUSD: 500 }] },
-            { month: 'Tháng 3', event: "St. Patrick's (17/3)", shops: 6, newShops: ['The CNMED Edit'], staffTotal: 14, staffOffline: 8, staffOutsource: 6, staffDesc: 'Scale up nhân sự', costVND: 81000000, revenueUSD: 17000, milestone: 'Điểm hòa vốn (Break-even)', shopDetails: [{ name: 'TonyCNMED', revUSD: 4000 }, { name: 'ArtCNMED', revUSD: 4000 }, { name: 'Simply', revUSD: 3000 }, { name: 'CNMED Studio', revUSD: 2500 }, { name: 'Lab', revUSD: 2500 }, { name: 'The Edit', revUSD: 1000 }] },
-            { month: 'Tháng 4', event: "Easter (Phục Sinh)", shops: 8, newShops: ['Designs', 'Artistry'], staffTotal: 19, staffOffline: 11, staffOutsource: 8, staffDesc: 'Tăng tốc', costVND: 108000000, revenueUSD: 37000, milestone: 'Tăng trưởng mạnh', shopDetails: [{ name: 'TonyCNMED', revUSD: 8000 }, { name: 'ArtCNMED', revUSD: 7500 }, { name: 'Simply', revUSD: 6000 }, { name: 'CNMED Studio', revUSD: 5000 }, { name: 'Lab', revUSD: 4500 }, { name: 'The Edit', revUSD: 3000 }, { name: 'Designs', revUSD: 1500 }, { name: 'Artistry', revUSD: 1500 }] },
-            { month: 'Tháng 5', event: "Mother's Day", shops: 10, newShops: ['Gallery', 'Creative'], staffTotal: 24, staffOffline: 14, staffOutsource: 10, staffDesc: 'Chuẩn bị đạt đỉnh', costVND: 135000000, revenueUSD: 72000, milestone: 'Đạt đỉnh Q2', shopDetails: [{ name: 'TonyCNMED', revUSD: 15000 }, { name: 'ArtCNMED', revUSD: 14000 }, { name: 'Simply', revUSD: 10000 }, { name: 'CNMED Studio', revUSD: 8000 }, { name: 'Lab', revUSD: 7000 }, { name: 'The Edit', revUSD: 6000 }, { name: 'Designs', revUSD: 4000 }, { name: 'Artistry', revUSD: 4000 }, { name: 'Gallery', revUSD: 2000 }, { name: 'Creative', revUSD: 2000 }] },
-            { month: 'Tháng 6', event: "Father's Day", shops: 12, newShops: ['Vibe', 'Style'], staffTotal: 29, staffOffline: 17, staffOutsource: 12, staffDesc: 'Ổn định', costVND: 162000000, revenueUSD: 78000, milestone: 'Mở rộng', shopDetails: [{ name: 'TonyCNMED', revUSD: 16000 }, { name: 'ArtCNMED', revUSD: 15000 }, { name: 'Simply', revUSD: 11000 }, { name: 'CNMED Studio', revUSD: 9000 }, { name: 'Lab', revUSD: 8000 }, { name: 'The Edit', revUSD: 7000 }, { name: 'Designs', revUSD: 4000 }, { name: 'Artistry', revUSD: 4000 }, { name: 'Gallery', revUSD: 2000 }, { name: 'Creative', revUSD: 2000 }, { name: 'Vibe', revUSD: 0 }, { name: 'Style', revUSD: 0 }] }
+            { month: 'Tháng 1', event: 'New Year (1/1)', shops: 3, newShops: ['TonyCNMED', 'ArtCNMED', 'Simply'], staffTotal: 4, staffOffline: 2, staffOutsource: 2, staffDesc: 'Team cốt lõi (Tuấn, Trân)', costVND: 27000000, revenueUSD: 0, milestone: 'Setup team', shopDetails: [{ name: 'TonyCNMED', revUSD: 0 }, { name: 'ArtCNMED', revUSD: 0 }, { name: 'Simply', revUSD: 0 }] },
+            { month: 'Tháng 2', event: "Valentine's", shops: 5, newShops: ['CNMED Studio', 'Lab'], staffTotal: 9, staffOffline: 5, staffOutsource: 4, staffDesc: 'Tuyển thêm Seller', costVND: 54000000, revenueUSD: 5000, milestone: 'Doanh thu đầu', shopDetails: [{ name: 'TonyCNMED', revUSD: 1500 }, { name: 'ArtCNMED', revUSD: 1500 }, { name: 'Simply', revUSD: 1000 }, { name: 'CNMED Studio', revUSD: 500 }, { name: 'Lab', revUSD: 500 }] },
+            { month: 'Tháng 3', event: "St. Patrick's", shops: 6, newShops: ['The Edit'], staffTotal: 14, staffOffline: 8, staffOutsource: 6, staffDesc: 'Scale up', costVND: 81000000, revenueUSD: 17000, milestone: 'Hòa vốn', shopDetails: [{ name: 'TonyCNMED', revUSD: 4000 }, { name: 'ArtCNMED', revUSD: 4000 }, { name: 'Simply', revUSD: 3000 }, { name: 'CNMED Studio', revUSD: 2500 }, { name: 'Lab', revUSD: 2500 }, { name: 'The Edit', revUSD: 1000 }] },
+            { month: 'Tháng 4', event: "Easter", shops: 8, newShops: ['Designs', 'Artistry'], staffTotal: 19, staffOffline: 11, staffOutsource: 8, staffDesc: 'Tăng tốc', costVND: 108000000, revenueUSD: 37000, milestone: 'Tăng trưởng', shopDetails: [{ name: 'TonyCNMED', revUSD: 8000 }, { name: 'ArtCNMED', revUSD: 7500 }, { name: 'Simply', revUSD: 6000 }, { name: 'CNMED Studio', revUSD: 5000 }, { name: 'Lab', revUSD: 4500 }, { name: 'The Edit', revUSD: 3000 }, { name: 'Designs', revUSD: 1500 }, { name: 'Artistry', revUSD: 1500 }] },
+            { month: 'Tháng 5', event: "Mother's Day", shops: 10, newShops: ['Gallery', 'Creative'], staffTotal: 24, staffOffline: 14, staffOutsource: 10, staffDesc: 'Đạt đỉnh Q2', costVND: 135000000, revenueUSD: 72000, milestone: 'Đạt đỉnh', shopDetails: [{ name: 'TonyCNMED', revUSD: 15000 }, { name: 'ArtCNMED', revUSD: 14000 }, { name: 'Simply', revUSD: 10000 }, { name: 'CNMED Studio', revUSD: 8000 }, { name: 'Lab', revUSD: 7000 }, { name: 'The Edit', revUSD: 6000 }, { name: 'Designs', revUSD: 4000 }, { name: 'Artistry', revUSD: 4000 }, { name: 'Gallery', revUSD: 2000 }, { name: 'Creative', revUSD: 2000 }] },
+            { month: 'Tháng 6', event: "Father's Day", shops: 12, newShops: ['Vibe', 'Style'], staffTotal: 29, staffOffline: 17, staffOutsource: 12, staffDesc: 'Mở rộng', costVND: 162000000, revenueUSD: 78000, milestone: 'Ổn định', shopDetails: [{ name: 'TonyCNMED', revUSD: 16000 }, { name: 'ArtCNMED', revUSD: 15000 }, { name: 'Simply', revUSD: 11000 }, { name: 'CNMED Studio', revUSD: 9000 }, { name: 'Lab', revUSD: 8000 }, { name: 'The Edit', revUSD: 7000 }, { name: 'Designs', revUSD: 4000 }, { name: 'Artistry', revUSD: 4000 }, { name: 'Gallery', revUSD: 2000 }, { name: 'Creative', revUSD: 2000 }, { name: 'Vibe', revUSD: 0 }, { name: 'Style', revUSD: 0 }] }
         ];
-
-        const MetricCard = ({ title, value, subtext, icon, color }) => (
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-start space-x-4 transition hover:shadow-md">
-                <div className={`p-3 rounded-lg ${color.split(' ')[0]} bg-opacity-10`}>
-                    <Icon name={icon} className={`w-6 h-6 ${color.split(' ')[1]}`} />
-                </div>
-                <div>
-                    <p className="text-sm font-medium text-slate-500">{title}</p>
-                    <h3 className="text-2xl font-bold text-slate-800 mt-1">{value}</h3>
-                    <p className="text-xs text-slate-400 mt-1">{subtext}</p>
-                </div>
-            </div>
-        );
-
-        const TimelineItem = ({ item, isLast, isOpen, onToggle, currency, formatMoney }) => (
-            <div className="relative flex gap-6 pb-8 last:pb-0">
-                {!isLast && <div className="absolute top-0 left-[19px] h-full w-0.5 bg-slate-200" />}
-                <div className="relative z-10 flex-shrink-0 w-10 h-10 rounded-full bg-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-md ring-4 ring-white">
-                    {item.month.replace('Tháng ', 'T')}
-                </div>
-                <div className="flex-1 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div className="p-5 cursor-pointer flex justify-between items-start" onClick={onToggle}>
-                        <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-1">
-                                <h4 className="font-bold text-lg text-slate-800">{item.event}</h4>
-                                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-indigo-50 text-indigo-600 border border-indigo-100">{item.milestone}</span>
-                            </div>
-                            <p className="text-sm text-slate-500">Quy mô: <b>{item.shops} Shops</b> • Nhân sự: <b>{item.staffTotal}</b></p>
-                        </div>
-                        <div className="text-right flex flex-col items-end gap-2">
-                            <div>
-                                <div className="text-xl font-bold text-green-600">{formatMoney(item.displayRevenue)}</div>
-                                <div className="text-xs text-slate-400">Doanh thu</div>
-                            </div>
-                            <Icon name="chevron-down" className={`w-5 h-5 text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-                        </div>
-                    </div>
-                    {isOpen && (
-                        <div className="bg-slate-50 border-t border-slate-100 p-5">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h5 className="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center">
-                                        <Icon name="users" className="w-4 h-4 mr-1.5" /> Nhân sự ({item.staffTotal})
-                                    </h5>
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between bg-white p-2 rounded border border-slate-100 text-sm">
-                                            <span>In-house:</span> <span className="font-bold">{item.staffOffline}</span>
-                                        </div>
-                                        <div className="flex justify-between bg-white p-2 rounded border border-slate-100 text-sm">
-                                            <span>Outsource:</span> <span className="font-bold">{item.staffOutsource}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h5 className="text-xs font-bold text-slate-400 uppercase mb-3 flex items-center">
-                                        <Icon name="store" className="w-4 h-4 mr-1.5" /> Shop Details
-                                    </h5>
-                                    <div className="bg-white p-3 rounded border border-slate-100 max-h-40 overflow-y-auto">
-                                        {item.shopDetails.map((shop, i) => (
-                                            <div key={i} className="flex justify-between text-xs mb-1">
-                                                <span>{shop.name}</span>
-                                                <span className="font-mono">{formatMoney(shop.displayRev)}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
-        );
 
         function App() {
             const [activeTab, setActiveTab] = useState('details');
-            const [expandedMonths, setExpandedMonths] = useState({0: true});
             const [currency, setCurrency] = useState('USD');
+            const [expanded, setExpanded] = useState({0: true});
 
             const processedData = useMemo(() => {
-                return rawData.map(item => {
-                    const rev = currency === 'USD' ? item.revenueUSD : item.revenueUSD * EXCHANGE_RATE;
-                    const cost = currency === 'USD' ? item.costVND / EXCHANGE_RATE : item.costVND;
-                    return {
-                        ...item,
-                        displayRevenue: rev,
-                        displayCost: cost,
-                        shopDetails: item.shopDetails.map(s => ({
-                            ...s, 
-                            displayRev: currency === 'USD' ? s.revUSD : s.revUSD * EXCHANGE_RATE
-                        }))
-                    };
-                });
+                return rawData.map(item => ({
+                    ...item,
+                    displayRevenue: currency === 'USD' ? item.revenueUSD : item.revenueUSD * EXCHANGE_RATE,
+                    displayCost: currency === 'USD' ? item.costVND / EXCHANGE_RATE : item.costVND
+                }));
             }, [currency]);
 
             const formatMoney = (val) => {
-                return currency === 'USD' 
-                    ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val)
-                    : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
+                return new Intl.NumberFormat(currency === 'USD' ? 'en-US' : 'vi-VN', {
+                    style: 'currency',
+                    currency: currency,
+                    maximumFractionDigits: 0
+                }).format(val);
             };
 
-            const totalRevenue = processedData.reduce((acc, curr) => acc + curr.displayRevenue, 0);
-            const totalCost = processedData.reduce((acc, curr) => acc + curr.displayCost, 0);
-
             return (
-                <div className="min-h-screen pb-20">
-                    <header className="bg-white border-b sticky top-0 z-50 p-4 shadow-sm">
-                        <div className="max-w-7xl mx-auto flex justify-between items-center">
-                            <div className="flex items-center gap-3">
-                                <div className="bg-indigo-600 p-2 rounded-lg text-white"><Icon name="trending-up" /></div>
-                                <h1 className="text-xl font-bold">ETSY PLAN 2024</h1>
+                <div className="min-h-screen pb-10">
+                    <header className="bg-white border-b p-4 sticky top-0 z-50 shadow-sm">
+                        <div className="max-w-6xl mx-auto flex justify-between items-center">
+                            <div className="flex items-center gap-2">
+                                <LucideIcon name="trending-up" className="w-8 h-8 text-indigo-600" />
+                                <h1 className="text-xl font-bold text-slate-800 uppercase">Etsy Plan 2024</h1>
                             </div>
-                            <div className="flex gap-2 bg-slate-100 p-1 rounded-lg">
-                                <button onClick={() => setCurrency('USD')} className={`px-3 py-1 rounded ${currency === 'USD' ? 'bg-white shadow' : ''}`}>USD</button>
-                                <button onClick={() => setCurrency('VND')} className={`px-3 py-1 rounded ${currency === 'VND' ? 'bg-white shadow' : ''}`}>VND</button>
+                            <div className="flex bg-slate-100 p-1 rounded-lg">
+                                <button onClick={() => setCurrency('USD')} className={`px-4 py-1 rounded-md text-sm font-bold ${currency === 'USD' ? 'bg-white shadow text-indigo-600' : 'text-slate-500'}`}>USD</button>
+                                <button onClick={() => setCurrency('VND')} className={`px-4 py-1 rounded-md text-sm font-bold ${currency === 'VND' ? 'bg-white shadow text-indigo-600' : 'text-slate-500'}`}>VND</button>
                             </div>
                         </div>
                     </header>
 
-                    <main className="max-w-7xl mx-auto p-6">
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-                            <MetricCard title="Doanh Thu" value={formatMoney(totalRevenue)} icon="dollar-sign" color="bg-green-500 text-green-600" />
-                            <MetricCard title="Chi Phí" value={formatMoney(totalCost)} icon="wallet" color="bg-red-500 text-red-600" />
-                            <MetricCard title="Quy Mô" value="12 Shops" icon="store" color="bg-indigo-500 text-indigo-600" />
-                            <MetricCard title="Nhân Sự" value="29 Members" icon="users" color="bg-blue-500 text-blue-600" />
+                    <main className="max-w-6xl mx-auto p-4 mt-6">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 text-center">
+                            <div className="bg-white p-4 rounded-xl border">
+                                <p className="text-xs text-slate-500 uppercase font-bold">Doanh Thu</p>
+                                <p className="text-lg font-black text-green-600">{formatMoney(processedData.reduce((a,b)=>a+b.displayRevenue, 0))}</p>
+                            </div>
+                            <div className="bg-white p-4 rounded-xl border">
+                                <p className="text-xs text-slate-500 uppercase font-bold">Chi Phí</p>
+                                <p className="text-lg font-black text-red-500">{formatMoney(processedData.reduce((a,b)=>a+b.displayCost, 0))}</p>
+                            </div>
+                            <div className="bg-white p-4 rounded-xl border">
+                                <p className="text-xs text-slate-500 uppercase font-bold">Quy Mô</p>
+                                <p className="text-lg font-black text-indigo-600">12 Shops</p>
+                            </div>
+                            <div className="bg-white p-4 rounded-xl border">
+                                <p className="text-xs text-slate-500 uppercase font-bold">Nhân Sự</p>
+                                <p className="text-lg font-black text-blue-600">29 Người</p>
+                            </div>
                         </div>
 
                         <div className="flex gap-2 mb-6">
-                            <button onClick={() => setActiveTab('overview')} className={`px-4 py-2 rounded-lg ${activeTab === 'overview' ? 'bg-indigo-600 text-white' : 'bg-white'}`}>Tổng Quan</button>
-                            <button onClick={() => setActiveTab('details')} className={`px-4 py-2 rounded-lg ${activeTab === 'details' ? 'bg-indigo-600 text-white' : 'bg-white'}`}>Lộ Trình</button>
+                            <button onClick={()=>setActiveTab('overview')} className={`flex-1 py-3 rounded-xl font-bold ${activeTab==='overview'?'bg-indigo-600 text-white':'bg-white border'}`}>BIỂU ĐỒ TỔNG QUAN</button>
+                            <button onClick={()=>setActiveTab('details')} className={`flex-1 py-3 rounded-xl font-bold ${activeTab==='details'?'bg-indigo-600 text-white':'bg-white border'}`}>LỘ TRÌNH CHI TIẾT</button>
                         </div>
 
                         {activeTab === 'overview' ? (
-                            <div className="bg-white p-6 rounded-xl h-[450px]">
+                            <div className="bg-white p-4 rounded-2xl border h-[400px]">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <ComposedChart data={processedData}>
-                                        <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                        <XAxis dataKey="month" />
-                                        <YAxis yAxisId="left" tickFormatter={v => currency === 'USD' ? `$${v/1000}k` : `${v/1000000}tr`} />
-                                        <Tooltip formatter={(v) => formatMoney(v)} />
+                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                        <XAxis dataKey="month" tick={{fontSize: 12}} />
+                                        <YAxis tick={{fontSize: 10}} tickFormatter={v => currency === 'USD' ? `$${v/1000}k` : `${v/1000000}tr`} />
+                                        <Tooltip formatter={v => formatMoney(v)} />
                                         <Legend />
-                                        <Bar yAxisId="left" dataKey="displayRevenue" name="Doanh thu" fill="#22c55e" />
-                                        <Line yAxisId="left" dataKey="displayCost" name="Chi phí" stroke="#ef4444" strokeWidth={3} />
+                                        <Bar dataKey="displayRevenue" name="Doanh thu" fill="#22c55e" radius={[4, 4, 0, 0]} />
+                                        <Line dataKey="displayCost" name="Chi phí" stroke="#ef4444" strokeWidth={3} dot={{r: 4}} />
                                     </ComposedChart>
                                 </ResponsiveContainer>
                             </div>
                         ) : (
-                            <div className="max-w-3xl mx-auto">
+                            <div className="space-y-4">
                                 {processedData.map((item, i) => (
-                                    <TimelineItem 
-                                        key={i} 
-                                        item={item} 
-                                        isOpen={expandedMonths[i]} 
-                                        isLast={i === 5}
-                                        onToggle={() => setExpandedMonths(p => ({...p, [i]: !p[i]}))}
-                                        currency={currency}
-                                        formatMoney={formatMoney}
-                                    />
+                                    <div key={i} className="bg-white rounded-2xl border overflow-hidden shadow-sm">
+                                        <div className="p-4 flex justify-between items-center cursor-pointer" onClick={()=>setExpanded({...expanded, [i]: !expanded[i]})}>
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-10 rounded-full bg-indigo-50 flex items-center justify-center font-black text-indigo-600">{i+1}</div>
+                                                <div>
+                                                    <p className="font-black text-slate-800">{item.month} - {item.event}</p>
+                                                    <p className="text-xs text-indigo-600 font-bold uppercase">{item.milestone}</p>
+                                                </div>
+                                            </div>
+                                            <div className="text-right">
+                                                <p className="font-black text-green-600">{formatMoney(item.displayRevenue)}</p>
+                                                <LucideIcon name="chevron-down" className={`w-4 h-4 transition-transform ${expanded[i]?'rotate-180':''}`} />
+                                            </div>
+                                        </div>
+                                        {expanded[i] && (
+                                            <div className="px-4 pb-4 pt-2 border-t bg-slate-50 grid grid-cols-2 gap-4">
+                                                <div className="bg-white p-3 rounded-xl border">
+                                                    <p className="text-[10px] font-bold text-slate-400 mb-2">NHÂN SỰ</p>
+                                                    <p className="text-sm">Tổng: <b>{item.staffTotal}</b></p>
+                                                    <p className="text-xs text-slate-500 italic">{item.staffDesc}</p>
+                                                </div>
+                                                <div className="bg-white p-3 rounded-xl border">
+                                                    <p className="text-[10px] font-bold text-slate-400 mb-2">QUY MÔ</p>
+                                                    <p className="text-sm"><b>{item.shops} Shops</b></p>
+                                                    <p className="text-xs text-red-500 font-bold">CP: {formatMoney(item.displayCost)}</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 ))}
                             </div>
                         )}
