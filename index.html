@@ -106,6 +106,24 @@
             return <i data-lucide={name} className={className}></i>;
         };
 
+        // Tooltip Row Component for financial details
+        const FinancialRow = ({ label, value, tooltip, isSubItem = true }) => (
+            <li className={`flex justify-between items-center ${isSubItem ? 'italic text-slate-400 text-[10px]' : ''}`}>
+                <div className="flex items-center gap-1.5 group relative">
+                    <span>{label}</span>
+                    <div className="cursor-help text-slate-300 hover:text-indigo-400 transition-colors">
+                        <Icon name="info" className="w-2.5 h-2.5" />
+                    </div>
+                    {/* Tooltip Popup */}
+                    <div className="absolute left-0 bottom-full mb-1 hidden group-hover:block w-48 p-2 bg-slate-800 text-white text-[9px] rounded shadow-lg z-50 normal-case font-normal leading-tight">
+                        {tooltip}
+                        <div className="absolute left-2 top-full w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-slate-800"></div>
+                    </div>
+                </div>
+                <span>{value}</span>
+            </li>
+        );
+
         const MetricCard = ({ title, value, subtext, icon, color }) => (
             <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex items-start space-x-3 transition hover:shadow-md">
                 <div className={`p-2.5 rounded-lg ${color} bg-opacity-10 flex-shrink-0`}>
@@ -135,14 +153,23 @@
                                 </span>
                             </div>
                             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">
-                                <span>Quy mô: <b>{item.shops} Shops</b></span>
+                                <span className="flex items-center gap-1.5">
+                                    Quy mô: <b>{item.shops} Shops</b>
+                                    {item.newShopsCount > 0 && (
+                                        <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-orange-50 text-orange-700 text-[9px] font-bold border border-orange-100">
+                                            +{item.newShopsCount} shop mới
+                                        </span>
+                                    )}
+                                </span>
                                 <span>•</span>
-                                <span>Nhân sự: <b>{item.staffTotal}</b></span>
-                                {item.newStaffCount > 0 && (
-                                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100">
-                                        +{item.newStaffCount} mới
-                                    </span>
-                                )}
+                                <span className="flex items-center gap-1.5">
+                                    Nhân sự: <b>{item.staffTotal}</b>
+                                    {item.newStaffCount > 0 && (
+                                        <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[9px] font-bold border border-blue-100">
+                                            +{item.newStaffCount} mới
+                                        </span>
+                                    )}
+                                </span>
                             </div>
                         </div>
                         <div className="text-right flex items-center gap-4">
@@ -174,30 +201,63 @@
                                             <li className="flex justify-between pb-1 border-b border-slate-100">
                                                 <span>Doanh thu:</span> <b className="text-green-600">{formatMoney(item.displayRevenue)}</b>
                                             </li>
-                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
-                                                <span>- Fullfillment (35%):</span> <span>{formatMoney(item.costBreakdown.fulfillment)}</span>
-                                            </li>
-                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
-                                                <span>- Phí sàn (17%):</span> <span>{formatMoney(item.costBreakdown.platform)}</span>
-                                            </li>
-                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
-                                                <span>- Marketing (10%):</span> <span>{formatMoney(item.costBreakdown.ads)}</span>
-                                            </li>
-                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
-                                                <span>- Nhân sự Inhouse:</span> <span>{formatMoney(item.costBreakdown.inhouse)}</span>
-                                            </li>
-                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
-                                                <span>- Nhân sự Outsource:</span> <span>{formatMoney(item.costBreakdown.outsource)}</span>
-                                            </li>
-                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
-                                                <span>- Phí văn phòng:</span> <span>{formatMoney(item.costBreakdown.office)}</span>
-                                            </li>
+                                            
+                                            <FinancialRow 
+                                                label="- Fulfillment (35%):" 
+                                                value={formatMoney(item.costBreakdown.fulfillment)}
+                                                tooltip="Chi phí xử lý đơn hàng: 35% doanh thu"
+                                            />
+                                            <FinancialRow 
+                                                label="- Phí sàn (17%):" 
+                                                value={formatMoney(item.costBreakdown.platform)}
+                                                tooltip="Phí sàn thương mại: 17% doanh thu"
+                                            />
+                                            <FinancialRow 
+                                                label="- Marketing (10%):" 
+                                                value={formatMoney(item.costBreakdown.ads)}
+                                                tooltip="Ngân sách chạy quảng cáo: 10% doanh thu"
+                                            />
+                                            <FinancialRow 
+                                                label="- Nhân sự Inhouse:" 
+                                                value={formatMoney(item.costBreakdown.inhouse)}
+                                                tooltip={`Tổng lương Inhouse: ${item.staffOffline} người x 9.000.000đ`}
+                                            />
+                                            <FinancialRow 
+                                                label="- Nhân sự Outsource:" 
+                                                value={formatMoney(item.costBreakdown.outsource)}
+                                                tooltip={`Tổng lương Outsource: ${item.staffOutsource} người x 5.000.000đ`}
+                                            />
+                                            <FinancialRow 
+                                                label="- Phí văn phòng:" 
+                                                value={formatMoney(item.costBreakdown.office)}
+                                                tooltip="Chi phí mặt bằng & điện nước: 9.000.000đ cố định/tháng"
+                                            />
+
                                             <li className="flex justify-between font-bold pt-1 border-t border-slate-100 text-red-500">
-                                                <span>Tổng chi phí:</span> <span>{formatMoney(item.displayCost)}</span>
+                                                <div className="flex items-center gap-1 group relative">
+                                                    <span>Tổng chi phí:</span>
+                                                    <div className="cursor-help text-slate-300 hover:text-red-400 transition-colors">
+                                                        <Icon name="info" className="w-2.5 h-2.5" />
+                                                    </div>
+                                                    <div className="absolute left-0 bottom-full mb-1 hidden group-hover:block w-48 p-2 bg-slate-800 text-white text-[9px] rounded shadow-lg z-50 normal-case font-normal leading-tight">
+                                                        Tổng các khoản chi phí phía trên
+                                                        <div className="absolute left-2 top-full w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-slate-800"></div>
+                                                    </div>
+                                                </div>
+                                                <span>{formatMoney(item.displayCost)}</span>
                                             </li>
                                             <li className={`flex justify-between font-bold pt-2 mt-1 border-t-2 border-indigo-100 text-base ${item.displayProfit >= 0 ? 'text-indigo-600' : 'text-orange-500'}`}>
                                                 <div className="flex flex-col">
-                                                    <span>Lợi nhuận ròng:</span>
+                                                    <div className="flex items-center gap-1 group relative">
+                                                        <span>Lợi nhuận ròng:</span>
+                                                        <div className="cursor-help text-slate-300 hover:text-indigo-400 transition-colors">
+                                                            <Icon name="info" className="w-2.5 h-2.5" />
+                                                        </div>
+                                                        <div className="absolute left-0 bottom-full mb-1 hidden group-hover:block w-48 p-2 bg-slate-800 text-white text-[9px] rounded shadow-lg z-50 normal-case font-normal leading-tight">
+                                                            Lợi nhuận = Doanh thu - Tổng chi phí
+                                                            <div className="absolute left-2 top-full w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-slate-800"></div>
+                                                        </div>
+                                                    </div>
                                                     <span className="text-[10px] font-normal opacity-70">Tỷ suất lợi nhuận: {item.profitMargin.toFixed(1)}%</span>
                                                 </div>
                                                 <span>{formatMoney(item.displayProfit)}</span>
@@ -240,6 +300,9 @@
                     const prevStaff = index > 0 ? rawData[index - 1].staffTotal : 0;
                     const newStaffCount = item.staffTotal - prevStaff;
 
+                    const prevShops = index > 0 ? rawData[index - 1].shops : 0;
+                    const newShopsCount = item.shops - prevShops;
+
                     // Tính toán chi phí (Gốc luôn là VND để đúng định mức 9M, 5M)
                     const revVND = item.revenueUSD * EXCHANGE_RATE;
                     
@@ -262,6 +325,7 @@
                     return {
                         ...item,
                         newStaffCount,
+                        newShopsCount,
                         profitMargin,
                         displayRevenue: convert(revVND),
                         displayCost: convert(totalCostVND),
