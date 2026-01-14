@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kế hoạch 6 tháng Etsy của CNMED</title>
+    <title>Etsy Growth Plan Dashboard</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM CDN -->
@@ -24,9 +24,8 @@
         .recharts-cartesian-grid-horizontal line, .recharts-cartesian-grid-vertical line {
             stroke: #f1f5f9;
         }
-        /* Fix for potential Recharts layout issues in flex containers */
         .recharts-responsive-container {
-            min-height: 300px;
+            min-height: 250px;
         }
     </style>
 </head>
@@ -35,16 +34,15 @@
 
     <script type="text/babel">
         const { useState, useMemo, useEffect } = React;
-        // Truy xuất từ đối tượng Recharts toàn cục sau khi thư viện đã nạp thành công
         const { 
-            ResponsiveContainer, ComposedChart, Line, Bar, XAxis, YAxis, 
+            ResponsiveContainer, ComposedChart, Line, Bar, Area, XAxis, YAxis, 
             CartesianGrid, Tooltip, Legend 
         } = Recharts;
 
-        // --- CẤU HÌNH ---
+        // --- CONFIGURATION ---
         const EXCHANGE_RATE = 25000;
 
-        // --- DỮ LIỆU GỐC ---
+        // --- UPDATED RAW DATA (Shop names changed to CNMED001-012) ---
         const rawData = [
             {
                 month: 'Tháng 1', event: 'New Year (1/1)', shops: 3, staffTotal: 4, staffOffline: 2, staffOutsource: 2,
@@ -54,31 +52,51 @@
             {
                 month: 'Tháng 2', event: "Valentine's (14/2)", shops: 5, staffTotal: 9, staffOffline: 5, staffOutsource: 4,
                 costVND: 54000000, revenueUSD: 5000, milestone: 'Doanh thu đầu tiên',
-                shopDetails: [{ name: 'CNMED001', revUSD: 1500 }, { name: 'CNMED002', revUSD: 1500 }, { name: 'CNMED003', revUSD: 1000 }, { name: 'CNMED004', revUSD: 500 }, { name: 'CNMED005', revUSD: 500 }]
+                shopDetails: [
+                    { name: 'CNMED001', revUSD: 1500 }, { name: 'CNMED002', revUSD: 1500 }, { name: 'CNMED003', revUSD: 1000 },
+                    { name: 'CNMED004', revUSD: 500 }, { name: 'CNMED005', revUSD: 500 }
+                ]
             },
             {
                 month: 'Tháng 3', event: "St. Patrick's (17/3)", shops: 6, staffTotal: 14, staffOffline: 8, staffOutsource: 6,
                 costVND: 81000000, revenueUSD: 17000, milestone: 'Điểm hòa vốn',
-                shopDetails: [{ name: 'CNMED001', revUSD: 4000 }, { name: 'CNMED002', revUSD: 4000 }, { name: 'CNMED003', revUSD: 3000 }, { name: 'CNMED004', revUSD: 2500 }, { name: 'CNMED005', revUSD: 2500 }, { name: 'CNMED006', revUSD: 1000 }]
+                shopDetails: [
+                    { name: 'CNMED001', revUSD: 4000 }, { name: 'CNMED002', revUSD: 4000 }, { name: 'CNMED003', revUSD: 3000 },
+                    { name: 'CNMED004', revUSD: 2500 }, { name: 'CNMED005', revUSD: 2500 }, { name: 'CNMED006', revUSD: 1000 }
+                ]
             },
             {
                 month: 'Tháng 4', event: "Easter (Phục Sinh)", shops: 8, staffTotal: 19, staffOffline: 11, staffOutsource: 8,
                 costVND: 108000000, revenueUSD: 37000, milestone: 'Tăng trưởng mạnh',
-                shopDetails: [{ name: 'CNMED001', revUSD: 8000 }, { name: 'CNMED002', revUSD: 7500 }, { name: 'CNMED003', revUSD: 6000 }, { name: 'CNMED004', revUSD: 5000 }, { name: 'CNMED005', revUSD: 4500 }, { name: 'CNMED006', revUSD: 3000 }, { name: 'CNMED007', revUSD: 1500 }, { name: 'CNMED008', revUSD: 1500 }]
+                shopDetails: [
+                    { name: 'CNMED001', revUSD: 8000 }, { name: 'CNMED002', revUSD: 7500 }, { name: 'CNMED003', revUSD: 6000 },
+                    { name: 'CNMED004', revUSD: 5000 }, { name: 'CNMED005', revUSD: 4500 }, { name: 'CNMED006', revUSD: 3000 },
+                    { name: 'CNMED007', revUSD: 1500 }, { name: 'CNMED008', revUSD: 1500 }
+                ]
             },
             {
                 month: 'Tháng 5', event: "Mother's Day", shops: 10, staffTotal: 24, staffOffline: 14, staffOutsource: 10,
                 costVND: 135000000, revenueUSD: 72000, milestone: 'Đạt đỉnh doanh thu Q2',
-                shopDetails: [{ name: 'CNMED001', revUSD: 15000 }, { name: 'CNMED002', revUSD: 14000 }, { name: 'CNMED003', revUSD: 10000 }, { name: 'CNMED004', revUSD: 8000 }, { name: 'CNMED005', revUSD: 7000 }, { name: 'CNMED006', revUSD: 6000 }, { name: 'CNMED007', revUSD: 4000 }, { name: 'CNMED008', revUSD: 4000 }, { name: 'CNMED009', revUSD: 2000 }, { name: 'CNMED010', revUSD: 2000 }]
+                shopDetails: [
+                    { name: 'CNMED001', revUSD: 15000 }, { name: 'CNMED002', revUSD: 14000 }, { name: 'CNMED003', revUSD: 10000 },
+                    { name: 'CNMED004', revUSD: 8000 }, { name: 'CNMED005', revUSD: 7000 }, { name: 'CNMED006', revUSD: 6000 },
+                    { name: 'CNMED007', revUSD: 4000 }, { name: 'CNMED008', revUSD: 4000 }, { name: 'CNMED009', revUSD: 2000 },
+                    { name: 'CNMED010', revUSD: 2000 }
+                ]
             },
             {
                 month: 'Tháng 6', event: "Father's Day", shops: 12, staffTotal: 29, staffOffline: 17, staffOutsource: 12,
                 costVND: 162000000, revenueUSD: 78000, milestone: 'Ổn định & Mở rộng',
-                shopDetails: [{ name: 'CNMED001', revUSD: 16000 }, { name: 'CNMED002', revUSD: 15000 }, { name: 'CNMED003', revUSD: 11000 }, { name: 'CNMED004', revUSD: 9000 }, { name: 'CNMED005', revUSD: 8000 }, { name: 'CNMED006', revUSD: 7000 }, { name: 'CNMED007', revUSD: 4000 }, { name: 'CNMED008', revUSD: 4000 }, { name: 'CNMED009', revUSD: 2000 }, { name: 'CNMED010', revUSD: 2000 }, { name: 'CNMED011', revUSD: 0 }, { name: 'CNMED012', revUSD: 0 }]
+                shopDetails: [
+                    { name: 'CNMED001', revUSD: 16000 }, { name: 'CNMED002', revUSD: 15000 }, { name: 'CNMED003', revUSD: 11000 },
+                    { name: 'CNMED004', revUSD: 9000 }, { name: 'CNMED005', revUSD: 8000 }, { name: 'CNMED006', revUSD: 7000 },
+                    { name: 'CNMED007', revUSD: 4000 }, { name: 'CNMED008', revUSD: 4000 }, { name: 'CNMED009', revUSD: 2000 },
+                    { name: 'CNMED010', revUSD: 2000 }, { name: 'CNMED011', revUSD: 0 }, { name: 'CNMED012', revUSD: 0 }
+                ]
             }
         ];
 
-        // Thành phần Icon Lucide hỗ trợ React
+        // Lucide Icon Component
         const Icon = ({ name, className }) => {
             useEffect(() => {
                 if (window.lucide) {
@@ -116,7 +134,16 @@
                                     {item.milestone}
                                 </span>
                             </div>
-                            <p className="text-sm text-slate-500">Quy mô: <b>{item.shops} Shops</b> • Nhân sự: <b>{item.staffTotal} người</b></p>
+                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">
+                                <span>Quy mô: <b>{item.shops} Shops</b></span>
+                                <span>•</span>
+                                <span>Nhân sự: <b>{item.staffTotal} người</b></span>
+                                {item.newStaffCount > 0 && (
+                                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100">
+                                        +{item.newStaffCount} nhân sự mới
+                                    </span>
+                                )}
+                            </div>
                         </div>
                         <div className="text-right flex flex-col items-end gap-2">
                             <div>
@@ -133,7 +160,7 @@
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center">
-                                        <Icon name="users" className="w-4 h-4 mr-1.5" /> Nhân sự ({item.staffTotal})
+                                        <Icon name="users" className="w-4 h-4 mr-1.5" /> Phân bổ Nhân sự ({item.staffTotal})
                                     </h5>
                                     <div className="space-y-3">
                                         <div className="flex items-center justify-between bg-white p-3 rounded border border-slate-100">
@@ -151,6 +178,11 @@
                                             <span className="text-lg font-bold text-orange-600">{item.staffOutsource}</span>
                                         </div>
                                     </div>
+                                    {item.newStaffCount > 0 && (
+                                        <p className="mt-3 text-[11px] text-blue-600 font-medium flex items-center">
+                                            <Icon name="user-plus" className="w-3 h-3 mr-1" /> Tháng này tăng thêm {item.newStaffCount} nhân sự
+                                        </p>
+                                    )}
                                 </div>
                                 <div>
                                     <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center">
@@ -183,21 +215,27 @@
             const [currency, setCurrency] = useState('USD');
 
             const processedData = useMemo(() => {
-                return rawData.map(item => ({
-                    ...item,
-                    displayRevenue: currency === 'USD' ? item.revenueUSD : item.revenueUSD * EXCHANGE_RATE,
-                    displayCost: currency === 'USD' ? item.costVND / EXCHANGE_RATE : item.costVND,
-                    shopDetails: item.shopDetails.map(s => ({
-                        ...s,
-                        displayRev: currency === 'USD' ? s.revUSD : s.revUSD * EXCHANGE_RATE
-                    }))
-                }));
+                return rawData.map((item, index) => {
+                    const prevStaff = index > 0 ? rawData[index - 1].staffTotal : 0;
+                    const newStaffCount = item.staffTotal - prevStaff;
+
+                    return {
+                        ...item,
+                        newStaffCount,
+                        displayRevenue: currency === 'USD' ? item.revenueUSD : item.revenueUSD * EXCHANGE_RATE,
+                        displayCost: currency === 'USD' ? item.costVND / EXCHANGE_RATE : item.costVND,
+                        shopDetails: item.shopDetails.map(s => ({
+                            ...s,
+                            displayRev: currency === 'USD' ? s.revUSD : s.revUSD * EXCHANGE_RATE
+                        }))
+                    };
+                });
             }, [currency]);
 
             const formatMoney = (val) => {
                 return currency === 'USD' 
                     ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val)
-                    : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(val);
+                    : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(val);
             };
 
             const stats = useMemo(() => ({
@@ -216,8 +254,8 @@
                                     <Icon name="trending-up" className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h1 className="text-lg font-bold text-slate-900 leading-tight">Etsy Growth Plan</h1>
-                                    <p className="text-[10px] text-slate-500 uppercase tracking-wider">Quý 1 & Quý 2 năm 2026</p>
+                                    <h1 className="text-lg font-bold text-slate-900 leading-tight">Etsy Growth</h1>
+                                    <p className="text-[10px] text-slate-500 uppercase tracking-wider">Strategy 2026</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-3">
@@ -242,21 +280,46 @@
                         </div>
 
                         {activeTab === 'overview' ? (
-                            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm h-[450px]">
-                                <h2 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider">Biểu đồ Tăng trưởng</h2>
-                                <div className="w-full h-full pb-8">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <ComposedChart data={processedData}>
-                                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                            <XAxis dataKey="month" tick={{fontSize: 12, fill: '#94a3b8'}} axisLine={false} tickLine={false} />
-                                            <YAxis yAxisId="left" tickFormatter={v => currency === 'USD' ? `$${v/1000}k` : `${v/1e6}tr`} tick={{fontSize: 10, fill: '#22c55e'}} axisLine={false} />
-                                            <YAxis yAxisId="right" orientation="right" tickFormatter={v => currency === 'USD' ? `$${v/1000}k` : `${v/1e6}tr`} tick={{fontSize: 10, fill: '#ef4444'}} axisLine={false} />
-                                            <Tooltip formatter={(v) => formatMoney(v)} contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}} />
-                                            <Legend verticalAlign="top" align="right" iconType="circle" />
-                                            <Bar yAxisId="left" dataKey="displayRevenue" name="Doanh thu" fill="#22c55e" radius={[4, 4, 0, 0]} barSize={40} />
-                                            <Line yAxisId="right" type="monotone" dataKey="displayCost" name="Chi phí" stroke="#ef4444" strokeWidth={3} dot={{r: 4}} />
-                                        </ComposedChart>
-                                    </ResponsiveContainer>
+                            <div className="space-y-6">
+                                {/* Chart 1: Revenue & Cost */}
+                                <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                    <h2 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider flex items-center">
+                                        <Icon name="bar-chart-3" className="w-4 h-4 mr-2 text-indigo-500" /> Doanh Thu vs Chi Phí
+                                    </h2>
+                                    <div className="w-full h-[300px]">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <ComposedChart data={processedData}>
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                                <XAxis dataKey="month" tick={{fontSize: 12, fill: '#94a3b8'}} axisLine={false} tickLine={false} />
+                                                <YAxis yAxisId="left" tickFormatter={v => currency === 'USD' ? `$${v/1000}k` : `${v/1e6}tr`} tick={{fontSize: 10, fill: '#22c55e'}} axisLine={false} />
+                                                <YAxis yAxisId="right" orientation="right" tickFormatter={v => currency === 'USD' ? `$${v/1000}k` : `${v/1e6}tr`} tick={{fontSize: 10, fill: '#ef4444'}} axisLine={false} />
+                                                <Tooltip formatter={(v) => formatMoney(v)} contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}} />
+                                                <Legend verticalAlign="top" align="right" iconType="circle" />
+                                                <Bar yAxisId="left" dataKey="displayRevenue" name="Doanh thu" fill="#22c55e" radius={[4, 4, 0, 0]} barSize={40} />
+                                                <Line yAxisId="right" type="monotone" dataKey="displayCost" name="Chi phí" stroke="#ef4444" strokeWidth={3} dot={{r: 4}} />
+                                            </ComposedChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                </div>
+
+                                {/* Chart 2: Staff Growth */}
+                                <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                                    <h2 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider flex items-center">
+                                        <Icon name="users-round" className="w-4 h-4 mr-2 text-blue-500" /> Tăng Trưởng Nhân Sự
+                                    </h2>
+                                    <div className="w-full h-[300px]">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <ComposedChart data={processedData}>
+                                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                                <XAxis dataKey="month" tick={{fontSize: 12, fill: '#94a3b8'}} axisLine={false} tickLine={false} />
+                                                <YAxis tick={{fontSize: 10, fill: '#3b82f6'}} axisLine={false} />
+                                                <Tooltip contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}} />
+                                                <Legend verticalAlign="top" align="right" iconType="circle" />
+                                                <Area type="monotone" dataKey="staffTotal" name="Tổng nhân sự" fill="#dbeafe" stroke="#3b82f6" strokeWidth={2} />
+                                                <Bar dataKey="newStaffCount" name="Nhân sự mới" fill="#1d4ed8" barSize={30} radius={[4, 4, 0, 0]} />
+                                            </ComposedChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </div>
                             </div>
                         ) : (
@@ -281,4 +344,3 @@
     </script>
 </body>
 </html>
-
