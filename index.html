@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Etsy Growth Plan Dashboard</title>
+    <title>E-com Growth Plan Dashboard</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & ReactDOM CDN -->
@@ -42,16 +42,16 @@
         // --- CONFIGURATION ---
         const EXCHANGE_RATE = 25000;
 
-        // --- UPDATED RAW DATA (Shop names changed to CNMED001-012) ---
+        // --- RAW DATA ---
         const rawData = [
             {
                 month: 'Tháng 1', event: 'New Year (1/1)', shops: 3, staffTotal: 4, staffOffline: 2, staffOutsource: 2,
-                costVND: 27000000, revenueUSD: 0, milestone: 'Setup team & Quy trình',
+                revenueUSD: 0, milestone: 'Setup team & Quy trình',
                 shopDetails: [{ name: 'CNMED001', revUSD: 0 }, { name: 'CNMED002', revUSD: 0 }, { name: 'CNMED003', revUSD: 0 }]
             },
             {
                 month: 'Tháng 2', event: "Valentine's (14/2)", shops: 5, staffTotal: 9, staffOffline: 5, staffOutsource: 4,
-                costVND: 54000000, revenueUSD: 5000, milestone: 'Doanh thu đầu tiên',
+                revenueUSD: 5000, milestone: 'Doanh thu đầu tiên',
                 shopDetails: [
                     { name: 'CNMED001', revUSD: 1500 }, { name: 'CNMED002', revUSD: 1500 }, { name: 'CNMED003', revUSD: 1000 },
                     { name: 'CNMED004', revUSD: 500 }, { name: 'CNMED005', revUSD: 500 }
@@ -59,7 +59,7 @@
             },
             {
                 month: 'Tháng 3', event: "St. Patrick's (17/3)", shops: 6, staffTotal: 14, staffOffline: 8, staffOutsource: 6,
-                costVND: 81000000, revenueUSD: 17000, milestone: 'Điểm hòa vốn',
+                revenueUSD: 17000, milestone: 'Điểm hòa vốn',
                 shopDetails: [
                     { name: 'CNMED001', revUSD: 4000 }, { name: 'CNMED002', revUSD: 4000 }, { name: 'CNMED003', revUSD: 3000 },
                     { name: 'CNMED004', revUSD: 2500 }, { name: 'CNMED005', revUSD: 2500 }, { name: 'CNMED006', revUSD: 1000 }
@@ -67,7 +67,7 @@
             },
             {
                 month: 'Tháng 4', event: "Easter (Phục Sinh)", shops: 8, staffTotal: 19, staffOffline: 11, staffOutsource: 8,
-                costVND: 108000000, revenueUSD: 37000, milestone: 'Tăng trưởng mạnh',
+                revenueUSD: 37000, milestone: 'Tăng trưởng mạnh',
                 shopDetails: [
                     { name: 'CNMED001', revUSD: 8000 }, { name: 'CNMED002', revUSD: 7500 }, { name: 'CNMED003', revUSD: 6000 },
                     { name: 'CNMED004', revUSD: 5000 }, { name: 'CNMED005', revUSD: 4500 }, { name: 'CNMED006', revUSD: 3000 },
@@ -76,7 +76,7 @@
             },
             {
                 month: 'Tháng 5', event: "Mother's Day", shops: 10, staffTotal: 24, staffOffline: 14, staffOutsource: 10,
-                costVND: 135000000, revenueUSD: 72000, milestone: 'Đạt đỉnh doanh thu Q2',
+                revenueUSD: 72000, milestone: 'Đạt đỉnh doanh thu Q2',
                 shopDetails: [
                     { name: 'CNMED001', revUSD: 15000 }, { name: 'CNMED002', revUSD: 14000 }, { name: 'CNMED003', revUSD: 10000 },
                     { name: 'CNMED004', revUSD: 8000 }, { name: 'CNMED005', revUSD: 7000 }, { name: 'CNMED006', revUSD: 6000 },
@@ -86,7 +86,7 @@
             },
             {
                 month: 'Tháng 6', event: "Father's Day", shops: 12, staffTotal: 29, staffOffline: 17, staffOutsource: 12,
-                costVND: 162000000, revenueUSD: 78000, milestone: 'Ổn định & Mở rộng',
+                revenueUSD: 78000, milestone: 'Ổn định & Mở rộng',
                 shopDetails: [
                     { name: 'CNMED001', revUSD: 16000 }, { name: 'CNMED002', revUSD: 15000 }, { name: 'CNMED003', revUSD: 11000 },
                     { name: 'CNMED004', revUSD: 9000 }, { name: 'CNMED005', revUSD: 8000 }, { name: 'CNMED006', revUSD: 7000 },
@@ -107,14 +107,14 @@
         };
 
         const MetricCard = ({ title, value, subtext, icon, color }) => (
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 flex items-start space-x-4 transition hover:shadow-md">
-                <div className={`p-3 rounded-lg ${color} bg-opacity-10`}>
-                    <Icon name={icon} className={`w-6 h-6 ${color.replace('bg-', 'text-')}`} />
+            <div className="bg-white p-5 rounded-xl shadow-sm border border-slate-100 flex items-start space-x-3 transition hover:shadow-md">
+                <div className={`p-2.5 rounded-lg ${color} bg-opacity-10 flex-shrink-0`}>
+                    <Icon name={icon} className={`w-5 h-5 ${color.replace('bg-', 'text-')}`} />
                 </div>
-                <div>
-                    <p className="text-sm font-medium text-slate-500">{title}</p>
-                    <h3 className="text-2xl font-bold text-slate-800 mt-1">{value}</h3>
-                    <p className="text-xs text-slate-400 mt-1">{subtext}</p>
+                <div className="min-w-0 flex-1">
+                    <p className="text-[11px] font-semibold text-slate-500 truncate uppercase tracking-wider">{title}</p>
+                    <h3 className="text-lg font-bold text-slate-800 mt-0.5 truncate">{value}</h3>
+                    <p className="text-[9px] text-slate-400 mt-0.5 truncate">{subtext}</p>
                 </div>
             </div>
         );
@@ -137,18 +137,24 @@
                             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-slate-500">
                                 <span>Quy mô: <b>{item.shops} Shops</b></span>
                                 <span>•</span>
-                                <span>Nhân sự: <b>{item.staffTotal} người</b></span>
+                                <span>Nhân sự: <b>{item.staffTotal}</b></span>
                                 {item.newStaffCount > 0 && (
                                     <span className="inline-flex items-center px-1.5 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-100">
-                                        +{item.newStaffCount} nhân sự mới
+                                        +{item.newStaffCount} mới
                                     </span>
                                 )}
                             </div>
                         </div>
-                        <div className="text-right flex flex-col items-end gap-2">
-                            <div>
-                                <div className="text-xl font-bold text-green-600">{formatMoney(item.displayRevenue)}</div>
-                                <div className="text-xs text-slate-400">Doanh thu</div>
+                        <div className="text-right flex items-center gap-4">
+                            <div className="hidden sm:block text-right">
+                                <div className={`text-xs font-bold ${item.displayProfit >= 0 ? 'text-indigo-600' : 'text-orange-500'}`}>
+                                    {formatMoney(item.displayProfit)} ({item.profitMargin.toFixed(1)}%)
+                                </div>
+                                <div className="text-[9px] text-slate-400 uppercase tracking-tighter">Lợi nhuận</div>
+                            </div>
+                            <div className="text-right">
+                                <div className="text-lg font-bold text-green-600">{formatMoney(item.displayRevenue)}</div>
+                                <div className="text-[9px] text-slate-400 uppercase tracking-tighter">Doanh thu</div>
                             </div>
                             <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                                 <Icon name="chevron-down" className="w-5 h-5 text-slate-400" />
@@ -160,43 +166,58 @@
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center">
-                                        <Icon name="users" className="w-4 h-4 mr-1.5" /> Phân bổ Nhân sự ({item.staffTotal})
+                                        <Icon name="calculator" className="w-4 h-4 mr-1.5" /> Chi tiết tài chính
                                     </h5>
-                                    <div className="space-y-3">
-                                        <div className="flex items-center justify-between bg-white p-3 rounded border border-slate-100">
-                                            <div className="flex items-center">
-                                                <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mr-3"><Icon name="user-check" className="w-4 h-4" /></div>
-                                                <div><p className="text-sm font-bold text-slate-700">In-house</p></div>
-                                            </div>
-                                            <span className="text-lg font-bold text-blue-600">{item.staffOffline}</span>
-                                        </div>
-                                        <div className="flex items-center justify-between bg-white p-3 rounded border border-slate-100">
-                                            <div className="flex items-center">
-                                                <div className="w-8 h-8 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center mr-3"><Icon name="globe" className="w-4 h-4" /></div>
-                                                <div><p className="text-sm font-bold text-slate-700">Outsource</p></div>
-                                            </div>
-                                            <span className="text-lg font-bold text-orange-600">{item.staffOutsource}</span>
-                                        </div>
+                                    
+                                    <div className="p-4 bg-white rounded-lg border border-slate-200">
+                                        <ul className="text-[11px] space-y-2 text-slate-600">
+                                            <li className="flex justify-between pb-1 border-b border-slate-100">
+                                                <span>Doanh thu:</span> <b className="text-green-600">{formatMoney(item.displayRevenue)}</b>
+                                            </li>
+                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
+                                                <span>- Fullfillment (35%):</span> <span>{formatMoney(item.costBreakdown.fulfillment)}</span>
+                                            </li>
+                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
+                                                <span>- Phí sàn (17%):</span> <span>{formatMoney(item.costBreakdown.platform)}</span>
+                                            </li>
+                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
+                                                <span>- Marketing (10%):</span> <span>{formatMoney(item.costBreakdown.ads)}</span>
+                                            </li>
+                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
+                                                <span>- Nhân sự Inhouse:</span> <span>{formatMoney(item.costBreakdown.inhouse)}</span>
+                                            </li>
+                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
+                                                <span>- Nhân sự Outsource:</span> <span>{formatMoney(item.costBreakdown.outsource)}</span>
+                                            </li>
+                                            <li className="flex justify-between italic text-slate-400 text-[10px]">
+                                                <span>- Phí văn phòng:</span> <span>{formatMoney(item.costBreakdown.office)}</span>
+                                            </li>
+                                            <li className="flex justify-between font-bold pt-1 border-t border-slate-100 text-red-500">
+                                                <span>Tổng chi phí:</span> <span>{formatMoney(item.displayCost)}</span>
+                                            </li>
+                                            <li className={`flex justify-between font-bold pt-2 mt-1 border-t-2 border-indigo-100 text-base ${item.displayProfit >= 0 ? 'text-indigo-600' : 'text-orange-500'}`}>
+                                                <div className="flex flex-col">
+                                                    <span>Lợi nhuận ròng:</span>
+                                                    <span className="text-[10px] font-normal opacity-70">Tỷ suất lợi nhuận: {item.profitMargin.toFixed(1)}%</span>
+                                                </div>
+                                                <span>{formatMoney(item.displayProfit)}</span>
+                                            </li>
+                                        </ul>
                                     </div>
-                                    {item.newStaffCount > 0 && (
-                                        <p className="mt-3 text-[11px] text-blue-600 font-medium flex items-center">
-                                            <Icon name="user-plus" className="w-3 h-3 mr-1" /> Tháng này tăng thêm {item.newStaffCount} nhân sự
-                                        </p>
-                                    )}
                                 </div>
                                 <div>
                                     <h5 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center">
-                                        <Icon name="store" className="w-4 h-4 mr-1.5" /> Shops ({item.shops})
+                                        <Icon name="store" className="w-4 h-4 mr-1.5" /> Breakdown Shops
                                     </h5>
-                                    <div className="bg-white p-3 rounded border border-slate-100 max-h-[200px] overflow-y-auto">
+                                    <div className="bg-white p-3 rounded-lg border border-slate-200 max-h-[240px] overflow-y-auto space-y-3">
                                         {item.shopDetails.map((shop, idx) => (
-                                            <div key={idx} className="mb-2 last:mb-0">
-                                                <div className="flex justify-between text-xs mb-1">
+                                            <div key={idx}>
+                                                <div className="flex justify-between text-[11px] mb-1">
                                                     <span className="font-medium text-slate-700">{shop.name}</span>
-                                                    <span className="text-slate-600 font-mono">{formatMoney(shop.displayRev)}</span>
+                                                    <span className="text-slate-500">{formatMoney(shop.displayRev)}</span>
                                                 </div>
-                                                <div className="w-full bg-slate-100 rounded-full h-1">
-                                                    <div className="bg-green-500 h-1 rounded-full" style={{ width: `${item.displayRevenue > 0 ? (shop.displayRev/item.displayRevenue)*100 : 0}%` }}></div>
+                                                <div className="w-full bg-slate-100 rounded-full h-1.5">
+                                                    <div className="bg-indigo-500 h-1.5 rounded-full" style={{ width: `${item.displayRevenue > 0 ? (shop.displayRev/item.displayRevenue)*100 : 0}%` }}></div>
                                                 </div>
                                             </div>
                                         ))}
@@ -219,31 +240,71 @@
                     const prevStaff = index > 0 ? rawData[index - 1].staffTotal : 0;
                     const newStaffCount = item.staffTotal - prevStaff;
 
+                    // Tính toán chi phí (Gốc luôn là VND để đúng định mức 9M, 5M)
+                    const revVND = item.revenueUSD * EXCHANGE_RATE;
+                    
+                    const breakdownVND = {
+                        fulfillment: revVND * 0.35,
+                        inhouse: item.staffOffline * 9000000,
+                        platform: revVND * 0.17,
+                        ads: revVND * 0.10,
+                        office: 9000000,
+                        outsource: item.staffOutsource * 5000000
+                    };
+                    
+                    const totalCostVND = Object.values(breakdownVND).reduce((a, b) => a + b, 0);
+                    const profitVND = revVND - totalCostVND;
+                    const profitMargin = revVND > 0 ? (profitVND / revVND) * 100 : 0;
+
+                    // Chuyển đổi sang đơn vị hiển thị
+                    const convert = (val) => currency === 'USD' ? val / EXCHANGE_RATE : val;
+
                     return {
                         ...item,
                         newStaffCount,
-                        displayRevenue: currency === 'USD' ? item.revenueUSD : item.revenueUSD * EXCHANGE_RATE,
-                        displayCost: currency === 'USD' ? item.costVND / EXCHANGE_RATE : item.costVND,
+                        profitMargin,
+                        displayRevenue: convert(revVND),
+                        displayCost: convert(totalCostVND),
+                        displayProfit: convert(profitVND),
+                        costBreakdown: {
+                            fulfillment: convert(breakdownVND.fulfillment),
+                            inhouse: convert(breakdownVND.inhouse),
+                            platform: convert(breakdownVND.platform),
+                            ads: convert(breakdownVND.ads),
+                            office: convert(breakdownVND.office),
+                            outsource: convert(breakdownVND.outsource)
+                        },
                         shopDetails: item.shopDetails.map(s => ({
                             ...s,
-                            displayRev: currency === 'USD' ? s.revUSD : s.revUSD * EXCHANGE_RATE
+                            displayRev: convert(s.revUSD * EXCHANGE_RATE)
                         }))
                     };
                 });
             }, [currency]);
 
             const formatMoney = (val) => {
-                return currency === 'USD' 
-                    ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val)
-                    : new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND', maximumFractionDigits: 0 }).format(val);
+                const options = { 
+                    style: 'currency', 
+                    currency: currency, 
+                    maximumFractionDigits: 0 
+                };
+                return new Intl.NumberFormat(currency === 'USD' ? 'en-US' : 'vi-VN', options).format(val);
             };
 
-            const stats = useMemo(() => ({
-                rev: processedData.reduce((a, c) => a + c.displayRevenue, 0),
-                cost: processedData.reduce((a, c) => a + c.displayCost, 0),
-                shops: processedData[processedData.length-1].shops,
-                staff: processedData[processedData.length-1].staffTotal
-            }), [processedData]);
+            const stats = useMemo(() => {
+                const totalRev = processedData.reduce((a, c) => a + c.displayRevenue, 0);
+                const totalProfit = processedData.reduce((a, c) => a + c.displayProfit, 0);
+                const avgMargin = totalRev > 0 ? (totalProfit / totalRev) * 100 : 0;
+
+                return {
+                    rev: totalRev,
+                    cost: processedData.reduce((a, c) => a + c.displayCost, 0),
+                    profit: totalProfit,
+                    margin: avgMargin,
+                    shops: processedData[processedData.length-1].shops,
+                    staff: processedData[processedData.length-1].staffTotal
+                };
+            }, [processedData]);
 
             return (
                 <div className="min-h-screen pb-20">
@@ -254,76 +315,79 @@
                                     <Icon name="trending-up" className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <h1 className="text-lg font-bold text-slate-900 leading-tight">Etsy Growth</h1>
-                                    <p className="text-[10px] text-slate-500 uppercase tracking-wider">Strategy 2026</p>
+                                    <h1 className="text-lg font-bold text-slate-900 leading-tight">CNMED Dashboard</h1>
+                                    <p className="text-[10px] text-slate-500 uppercase tracking-wider">Strategy 2024</p>
                                 </div>
                             </div>
                             <div className="flex items-center gap-3">
-                                <div className="bg-slate-100 p-1 rounded-lg flex text-[10px] font-bold">
-                                    <button onClick={() => setCurrency('USD')} className={`px-3 py-1.5 rounded-md ${currency === 'USD' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-400'}`}>USD</button>
-                                    <button onClick={() => setCurrency('VND')} className={`px-3 py-1.5 rounded-md ${currency === 'VND' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-400'}`}>VND</button>
+                                <div className="bg-slate-100 p-1 rounded-lg flex text-[10px] font-bold border border-slate-200">
+                                    <button onClick={() => setCurrency('USD')} className={`px-4 py-1.5 rounded-md transition-all ${currency === 'USD' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-400'}`}>USD</button>
+                                    <button onClick={() => setCurrency('VND')} className={`px-4 py-1.5 rounded-md transition-all ${currency === 'VND' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-400'}`}>VND</button>
                                 </div>
-                                <nav className="flex bg-slate-100 p-1 rounded-lg text-xs font-medium">
-                                    <button onClick={() => setActiveTab('overview')} className={`px-4 py-1.5 rounded-md ${activeTab === 'overview' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}>Tổng Quan</button>
-                                    <button onClick={() => setActiveTab('details')} className={`px-4 py-1.5 rounded-md ${activeTab === 'details' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}>Lộ Trình</button>
+                                <nav className="flex bg-slate-100 p-1 rounded-lg text-xs font-medium border border-slate-200">
+                                    <button onClick={() => setActiveTab('overview')} className={`px-4 py-1.5 rounded-md transition-all ${activeTab === 'overview' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}>Tổng Quan</button>
+                                    <button onClick={() => setActiveTab('details')} className={`px-4 py-1.5 rounded-md transition-all ${activeTab === 'details' ? 'bg-white shadow-sm text-indigo-600' : 'text-slate-500'}`}>Lộ Trình</button>
                                 </nav>
                             </div>
                         </div>
                     </header>
 
                     <main className="max-w-7xl mx-auto px-4 py-8">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                            <MetricCard title="Tổng Doanh Thu" value={formatMoney(stats.rev)} subtext="Tích lũy 6 tháng" icon="dollar-sign" color="bg-green-500" />
-                            <MetricCard title="Chi Phí Vận Hành" value={formatMoney(stats.cost)} subtext="Quỹ lương & Văn phòng" icon="wallet" color="bg-red-500" />
-                            <MetricCard title="Quy Mô Shop" value={`${stats.shops} Shops`} subtext="Mục tiêu cuối Q2" icon="store" color="bg-indigo-500" />
-                            <MetricCard title="Nhân Sự" value={`${stats.staff} Thành viên`} subtext="In-house & Outsource" icon="users" color="bg-blue-500" />
+                        {/* KPI SECTION */}
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-8">
+                            <MetricCard title="Doanh Thu" value={formatMoney(stats.rev)} subtext="Tích lũy 6 tháng" icon="dollar-sign" color="bg-green-500" />
+                            <MetricCard title="Chi Phí" value={formatMoney(stats.cost)} subtext="Vận hành & Nhân sự" icon="wallet" color="bg-red-500" />
+                            <MetricCard title="Lợi Nhuận" value={formatMoney(stats.profit)} subtext="Net Profit" icon="award" color="bg-indigo-600" />
+                            <MetricCard title="Tỷ Suất LN" value={`${stats.margin.toFixed(1)}%`} subtext="Biên lợi nhuận ròng" icon="percent" color="bg-purple-500" />
+                            <MetricCard title="Quy Mô" value={`${stats.shops} Shops`} subtext="Mục tiêu Q2" icon="store" color="bg-orange-500" />
+                            <MetricCard title="Đội Ngũ" value={`${stats.staff} Mem`} subtext="Nhân sự cuối kỳ" icon="users" color="bg-blue-500" />
                         </div>
 
                         {activeTab === 'overview' ? (
                             <div className="space-y-6">
-                                {/* Chart 1: Revenue & Cost */}
+                                {/* Chart 1: Revenue, Cost & Profit */}
                                 <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                                     <h2 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider flex items-center">
-                                        <Icon name="bar-chart-3" className="w-4 h-4 mr-2 text-indigo-500" /> Doanh Thu vs Chi Phí
+                                        <Icon name="bar-chart-3" className="w-4 h-4 mr-2 text-indigo-500" /> Hiệu Quả Tài Chính ({currency})
                                     </h2>
-                                    <div className="w-full h-[300px]">
+                                    <div className="w-full h-[320px]">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <ComposedChart data={processedData}>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                                <XAxis dataKey="month" tick={{fontSize: 12, fill: '#94a3b8'}} axisLine={false} tickLine={false} />
-                                                <YAxis yAxisId="left" tickFormatter={v => currency === 'USD' ? `$${v/1000}k` : `${v/1e6}tr`} tick={{fontSize: 10, fill: '#22c55e'}} axisLine={false} />
-                                                <YAxis yAxisId="right" orientation="right" tickFormatter={v => currency === 'USD' ? `$${v/1000}k` : `${v/1e6}tr`} tick={{fontSize: 10, fill: '#ef4444'}} axisLine={false} />
-                                                <Tooltip formatter={(v) => formatMoney(v)} contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}} />
+                                                <XAxis dataKey="month" tick={{fontSize: 11, fill: '#94a3b8'}} axisLine={false} tickLine={false} />
+                                                <YAxis tickFormatter={v => currency === 'USD' ? `$${v/1000}k` : `${v/1e6}tr`} tick={{fontSize: 10, fill: '#64748b'}} axisLine={false} />
+                                                <Tooltip formatter={(v) => typeof v === 'number' ? formatMoney(v) : v} contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'}} />
                                                 <Legend verticalAlign="top" align="right" iconType="circle" />
-                                                <Bar yAxisId="left" dataKey="displayRevenue" name="Doanh thu" fill="#22c55e" radius={[4, 4, 0, 0]} barSize={40} />
-                                                <Line yAxisId="right" type="monotone" dataKey="displayCost" name="Chi phí" stroke="#ef4444" strokeWidth={3} dot={{r: 4}} />
+                                                <Bar dataKey="displayRevenue" name="Doanh thu" fill="#22c55e" radius={[4, 4, 0, 0]} barSize={35} />
+                                                <Bar dataKey="displayCost" name="Chi phí" fill="#ef4444" radius={[4, 4, 0, 0]} barSize={35} />
+                                                <Line type="monotone" dataKey="displayProfit" name="Lợi nhuận" stroke="#4f46e5" strokeWidth={3} dot={{r: 4}} />
                                             </ComposedChart>
                                         </ResponsiveContainer>
                                     </div>
                                 </div>
 
-                                {/* Chart 2: Staff Growth */}
+                                {/* Chart 2: Staff & Shops */}
                                 <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
                                     <h2 className="text-sm font-bold text-slate-800 mb-6 uppercase tracking-wider flex items-center">
-                                        <Icon name="users-round" className="w-4 h-4 mr-2 text-blue-500" /> Tăng Trưởng Nhân Sự
+                                        <Icon name="users-round" className="w-4 h-4 mr-2 text-blue-500" /> Quy Mô Đội Ngũ & Shop
                                     </h2>
-                                    <div className="w-full h-[300px]">
+                                    <div className="w-full h-[280px]">
                                         <ResponsiveContainer width="100%" height="100%">
                                             <ComposedChart data={processedData}>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                                <XAxis dataKey="month" tick={{fontSize: 12, fill: '#94a3b8'}} axisLine={false} tickLine={false} />
-                                                <YAxis tick={{fontSize: 10, fill: '#3b82f6'}} axisLine={false} />
-                                                <Tooltip contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)'}} />
+                                                <XAxis dataKey="month" tick={{fontSize: 11, fill: '#94a3b8'}} axisLine={false} tickLine={false} />
+                                                <YAxis tick={{fontSize: 10, fill: '#64748b'}} axisLine={false} />
+                                                <Tooltip contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px rgba(0,0,0,0.1)'}} />
                                                 <Legend verticalAlign="top" align="right" iconType="circle" />
                                                 <Area type="monotone" dataKey="staffTotal" name="Tổng nhân sự" fill="#dbeafe" stroke="#3b82f6" strokeWidth={2} />
-                                                <Bar dataKey="newStaffCount" name="Nhân sự mới" fill="#1d4ed8" barSize={30} radius={[4, 4, 0, 0]} />
+                                                <Line type="stepAfter" dataKey="shops" name="Số lượng Shop" stroke="#f59e0b" strokeWidth={2} dot={{r: 5}} />
                                             </ComposedChart>
                                         </ResponsiveContainer>
                                     </div>
                                 </div>
                             </div>
                         ) : (
-                            <div className="max-w-3xl mx-auto pl-4">
+                            <div className="max-w-3xl mx-auto">
                                 {processedData.map((item, i) => (
                                     <TimelineItem 
                                         key={i} item={item} isLast={i === processedData.length-1} 
